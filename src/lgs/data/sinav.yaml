@@ -1,0 +1,58 @@
+# LGS merkezî sınavının yapısı ve yıl kataloğu.
+# Kaynak: MEB/ODSGM duyuruları ve başvuru kılavuzları. "dogrulanacak" işaretli
+# alanlar resmi belgeyle teyit edilmeden analizde kesin bilgi gibi kullanılmamalı.
+
+format:
+  secenekler: [A, B, C, D]
+  kitapciklar: [A, B]
+  net_formulu: "net = dogru - yanlis / 3"
+  yanlis_goturme_orani: 3
+  puan_araligi: [100, 500]
+  not: >-
+    Soru sıralaması A ve B kitapçıklarında farklıdır. Soru bankasında kanonik
+    numara A kitapçığıdır; B kitapçığı cevap anahtarı ayrıca saklanır.
+
+oturumlar:
+  - id: sozel
+    ad: Sözel Bölüm (1. oturum)
+    sure_dk: 75
+    soru_sayisi: 50
+    dersler: [turkce, inkilap, din, ingilizce]
+  - id: sayisal
+    ad: Sayısal Bölüm (2. oturum)
+    sure_dk: 80
+    soru_sayisi: 40
+    dersler: [matematik, fen]
+
+# Kitapçıktaki sıralama "sira" alanıdır; her dersin numaralandırması 1'den başlar.
+dersler:
+  turkce:    {ad: "Türkçe",                                   kod: TUR, oturum: sozel,   sira: 1, soru_sayisi: 20, katsayi: 4}
+  inkilap:   {ad: "T.C. İnkılap Tarihi ve Atatürkçülük",      kod: INK, oturum: sozel,   sira: 2, soru_sayisi: 10, katsayi: 1}
+  din:       {ad: "Din Kültürü ve Ahlak Bilgisi",             kod: DIN, oturum: sozel,   sira: 3, soru_sayisi: 10, katsayi: 1}
+  ingilizce: {ad: "Yabancı Dil (İngilizce)",                  kod: ING, oturum: sozel,   sira: 4, soru_sayisi: 10, katsayi: 1}
+  matematik: {ad: "Matematik",                                kod: MAT, oturum: sayisal, sira: 1, soru_sayisi: 20, katsayi: 4}
+  fen:       {ad: "Fen Bilimleri",                            kod: FEN, oturum: sayisal, sira: 2, soru_sayisi: 20, katsayi: 4}
+
+# Yapılmış tüm LGS merkezî sınavları. Her yıl 90 soru => 2018-2026 arası 810 soru.
+# durum: kaynak_bekleniyor -> PDF henüz işlenmedi
+#        islendi           -> sorular data/bank/<yil>.jsonl içinde
+#        dogrulandi        -> sorular + cevap anahtarı + etiketler elle kontrol edildi
+sinavlar:
+  - {yil: 2018, tarih: null, durum: kaynak_bekleniyor, not: "LGS kapsamındaki ilk merkezî sınav."}
+  - {yil: 2019, tarih: null, durum: kaynak_bekleniyor}
+  - {yil: 2020, tarih: null, durum: kaynak_bekleniyor, kapsam_notu: "Pandemi nedeniyle kapsamın 1. dönem kazanımlarıyla sınırlandığı bildiriliyor (dogrulanacak)."}
+  - {yil: 2021, tarih: null, durum: kaynak_bekleniyor}
+  - {yil: 2022, tarih: null, durum: kaynak_bekleniyor}
+  - {yil: 2023, tarih: null, durum: kaynak_bekleniyor, kapsam_notu: "Kaynaklara göre kapsam ağırlıklı olarak 1. dönem kazanımları (dogrulanacak)."}
+  - {yil: 2024, tarih: null, durum: kaynak_bekleniyor}
+  - {yil: 2025, tarih: "2025-06-15", durum: kaynak_bekleniyor}
+  - {yil: 2026, tarih: "2026-06-13", durum: kaynak_bekleniyor}
+
+# Resmi kaynaklar (bu ortamın ağ politikası meb.gov.tr alan adlarını engelliyor;
+# izin verildiğinde `lgs indir` bu sayfalardaki PDF bağlantılarını toplar).
+kaynaklar:
+  resmi:
+    - https://odsgm.meb.gov.tr/www/lgs-kapsamindaki-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari-yayimlandi/icerik/1678
+    - https://odsgm.meb.gov.tr/www/lgs-kapsamindaki-merkezi-sinav-tamamlandi-soru-kitapciklari-yayimlandi/icerik/1446
+  ornek_sorular:
+    - https://odsgm.meb.gov.tr/www/lgs-kapsamindaki-merkezi-sinava-yonelik-ornek-sorular-yayimlandi/icerik/1321

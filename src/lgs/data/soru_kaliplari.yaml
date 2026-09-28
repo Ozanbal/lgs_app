@@ -1,0 +1,588 @@
+# LGS soru kalıbı (soru tipi) taksonomisi.
+#
+# Bir soru birden fazla kalıba sahip olabilir: ders kalıbı (örn. TUR-CIKARIM)
+# + genel kalıplar (örn. GEN-OLUMSUZ-KOK, GEN-ONCULLU). Analiz motoru öğrencinin
+# hatalarını bu kalıplar ve çeldirici tipleri üzerinden gruplayıp taktik önerir.
+#
+# ipuclari:      soru kökü + seçenek metninin küçük harfe çevrilmiş hâlinde aranan
+#                düzenli ifadeler (Python re). Türkçe küçük harfe çevirmede "I" -> "ı"
+#                olduğundan Romen rakamları [iı] ile aranır.
+# min_uzunluk:   (ops.) soru kökünün en az karakter sayısı
+# uniteler:      kalıp tek bir konuya işaret ediyorsa mufredat.yaml ünite kimlikleri
+# hedef_sure_sn: sınav temposuna göre bu kalıba ayrılması önerilen süre
+#                (sözel oturum ort. 90 sn/soru, sayısal oturum ort. 120 sn/soru)
+
+celdirici_tipleri:
+  - id: KAPSAM-GENIS
+    ad: Aşırı genelleme
+    aciklama: Metin "bazı / genellikle" derken seçenek "her / tüm / asla" der; kapsam büyütülmüştür.
+    karsi_taktik: Seçeneklerdeki niceleyicileri (her, tüm, hiç, yalnızca, sadece) metindekilerle karşılaştır.
+  - id: KAPSAM-DAR
+    ad: Dar kapsam (yardımcı düşünce tuzağı)
+    aciklama: Metnin bir bölümünde geçen doğru bilgi ana düşünce gibi sunulur.
+    karsi_taktik: '"Bu seçenek metnin tamamını mı yoksa bir cümlesini mi özetliyor?" sorusunu sor.'
+  - id: METINDE-VAR-KOKU-KARSILAMAZ
+    ad: Doğru ama soruya cevap değil
+    aciklama: Seçenek metinde geçer ve doğrudur fakat soru kökünün istediği şey (ör. amaç, neden, başlık) değildir.
+    karsi_taktik: Önce soru kökünü kendi cümlenle yeniden yaz, sonra seçeneği köke göre değerlendir.
+  - id: DIS-BILGI
+    ad: Metin dışı bilgi
+    aciklama: Genel kültürle doğru ama metinden/verilen bilgiden çıkarılamayan yargı.
+    karsi_taktik: Her seçenek için metinde dayanak cümleyi işaretle; dayanağı yoksa ele.
+  - id: TERS-ILISKI
+    ad: Ters ilişki
+    aciklama: Neden-sonuç, artma-azalma ya da doğru-ters orantı yönü ters çevrilmiştir.
+    karsi_taktik: İlişkiyi ok ile (A → B) yazıp seçenekteki yönle karşılaştır.
+  - id: KISMEN-DOGRU
+    ad: Kısmen doğru
+    aciklama: Seçeneğin bir yarısı doğru, diğer yarısı yanlış ya da metinde yok.
+    karsi_taktik: Birleşik seçenekleri ("ve", "ancak") parçalara ayırıp her parçayı ayrı doğrula.
+  - id: SOZCUK-AVCILIGI
+    ad: Anahtar sözcük tuzağı
+    aciklama: Metindeki kelimeleri aynen tekrar eden ama anlamı farklı seçenek.
+    karsi_taktik: Kelime eşleşmesine değil anlam eşleşmesine bak; "aynı kelime = doğru cevap" varsayımından vazgeç.
+  - id: ARA-SONUC
+    ad: Ara sonuç
+    aciklama: Çok adımlı işlemde ara adımda bulunan değer seçeneklerde yer alır.
+    karsi_taktik: Soru kökünün ne istediğini (toplam mı, fark mı, kalan mı) işlemden önce çerçeve içine al.
+  - id: BIRIM-OLCEK
+    ad: Birim / ölçek hatası
+    aciklama: cm-m, dakika-saat, TL-kuruş veya ölçek dönüşümü atlanınca çıkan sonuç.
+    karsi_taktik: Sonucu yazmadan önce birimini yanına yaz; sorunun istediği birimle karşılaştır.
+  - id: ISARET-YON
+    ad: İşaret / yön hatası
+    aciklama: Negatif üs, eşitsizlik yönü, eğim işareti, basınç artış-azalış yönü.
+    karsi_taktik: Negatifle çarpma/bölme ve işaret değiştiren her adımda kısa bir işaret kontrolü yap.
+  - id: KAVRAM-KARISIKLIGI
+    ad: Benzer kavram karışıklığı
+    aciklama: Mutasyon-modifikasyon, kader-kaza, manda-himaye, fiziksel-kimyasal değişim gibi yakın kavramlar.
+    karsi_taktik: Karıştırılan kavram çiftleri için ayırt edici tek cümlelik tanım kartları hazırla.
+  - id: KRONOLOJI
+    ad: Kronoloji karışıklığı
+    aciklama: Olayların sırası veya hangi olayın hangisinden önce/sonra geldiği karıştırılır.
+    karsi_taktik: Dönemleri 5-6 kilometre taşına bağlayan kişisel zaman çizelgesi ile çalış.
+  - id: OLUMSUZ-KOK
+    ad: Olumsuz kök tuzağı
+    aciklama: Soru "hangisi söylenemez / değildir" diye sorar; dikkatsiz okuyan için doğru ifadeler hazır bekler.
+    karsi_taktik: Olumsuz eki soru kökünde daire içine al; her seçeneğin yanına D/Y yazarak ilerle.
+
+kaliplar:
+  # ------------------------------------------------------------------ TÜRKÇE
+  - id: TUR-ANA-DUSUNCE
+    ders: turkce
+    ad: Ana düşünce / konu / başlık
+    uniteler: [tur.paragraf]
+    ipuclari: ["asıl anlatılmak istenen", "ana düşünce", "vurgulanmak istenen", "anlatılmak istenen", "konusu", "başlık", "ana fikr"]
+    hedef_sure_sn: 75
+    celdiriciler: [KAPSAM-DAR, KAPSAM-GENIS, SOZCUK-AVCILIGI]
+    taktikler:
+      - Önce seçenekleri değil metni oku; metnin son iki cümlesine özellikle dikkat et, LGS metinlerinde yargı çoğunlukla sondadır.
+      - '"Yazar bu metni neden yazdı?" sorusuna tek cümlelik cevap üret, sonra seçeneklerde bu cümleye en yakın olanı ara.'
+      - Metnin yalnızca bir bölümünü karşılayan seçenekleri (dar kapsam) ilk turda ele.
+    sik_hatalar:
+      - Metinde aynen geçen cümleyi ana düşünce sanmak.
+      - Örnek verilen durumu genel yargıyla karıştırmak.
+
+  - id: TUR-CIKARIM
+    ders: turkce
+    ad: Metinden çıkarım / metinle uyum
+    uniteler: [tur.paragraf]
+    ipuclari: ["çıkarılabilir", "çıkarılamaz", "ulaşılabilir", "ulaşılamaz", "değinilmiştir", "değinilmemiştir", "söylenebilir", "söylenemez", "bu metne göre", "bu metinden hareketle", "bu parçaya göre"]
+    hedef_sure_sn: 85
+    celdiriciler: [DIS-BILGI, KAPSAM-GENIS, OLUMSUZ-KOK, KISMEN-DOGRU]
+    taktikler:
+      - Her seçenek için metinde dayanak cümle bul ve numarasını seçeneğin yanına yaz; dayanağı olmayan seçenek cevaptır (olumsuz kök) veya elenir (olumlu kök).
+      - '"Kesinlikle, her zaman, tüm" gibi sert niceleyici taşıyan seçeneklere şüpheyle yaklaş.'
+    sik_hatalar:
+      - Kendi bilgisine dayanarak metinde olmayan yargıyı doğru kabul etmek.
+
+  - id: TUR-PARAGRAF-YAPI
+    ders: turkce
+    ad: Paragraf yapısı (akışı bozan cümle, ikiye bölme, sıralama, boşluk doldurma)
+    uniteler: [tur.paragraf]
+    ipuclari: ["akışını bozan", "ikinci paragraf", "iki paragrafa", "ikiye bölün", "sıralan", "boş bırakılan yer", "boşluğa", "getirilmelidir", "yer değiştir"]
+    hedef_sure_sn: 90
+    celdiriciler: [SOZCUK-AVCILIGI, KAPSAM-DAR]
+    taktikler:
+      - Akışı bozan cümlede konuyu değil bakış açısını izle; aynı konudan söz edip yönü değiştiren cümle genellikle cevaptır.
+      - Boşluk doldurmada boşluğun hem öncesindeki hem sonrasındaki cümleyle bağ kur; bağlaçlar (ama, bu yüzden, örneğin) güçlü ipucudur.
+      - Paragrafı ikiye bölmede yeni bir alt konu veya zaman/mekân değişimi başlatan cümleyi ara.
+
+  - id: TUR-METIN-KARSILASTIRMA
+    ders: turkce
+    ad: İki metin / kişi görüşü karşılaştırma
+    uniteler: [tur.paragraf]
+    ipuclari: ["bu iki metin", "iki metinde", "her iki", "ortak", "metinlerin ikisinde", "kişilerin", "görüş"]
+    hedef_sure_sn: 100
+    celdiriciler: [KISMEN-DOGRU, METINDE-VAR-KOKU-KARSILAMAZ]
+    taktikler:
+      - Her metnin yanına tek kelimelik özet (tutum) yaz; seçenekleri bu iki etiketle karşılaştır.
+      - '"Ortak" soruluyorsa yalnızca birinde geçen bilgiyi taşıyan seçenekleri hemen ele.'
+
+  - id: TUR-SOZEL-MANTIK
+    ders: turkce
+    ad: Sözel mantık / muhakeme
+    uniteler: [tur.sozel_mantik]
+    ipuclari: ["aşağıdaki bilgiler", "bilgilere göre", "bu bilgilere göre", "kesinlikle doğru", "kesinlikle yanlış", "oturma düzeni", "sıralama", "yerleştir", "kaçıncı"]
+    min_uzunluk: 200
+    hedef_sure_sn: 150
+    celdiriciler: [KISMEN-DOGRU, KAPSAM-GENIS]
+    taktikler:
+      - Bilgileri okumadan önce tablo iskeletini (kişi x özellik) kur; kesin bilgileri önce, koşullu bilgileri sonra yerleştir.
+      - '"Kesinlikle" soruluyorsa birden fazla yerleşim ihtimalini çiz; tüm ihtimallerde değişmeyen bilgi cevaptır.'
+      - Sözel oturumda bu kalıba en fazla 2,5 dk ayır; takılırsan işaretleyip turun sonunda dön.
+    sik_hatalar:
+      - Tek bir olası yerleşimi bulup onu kesin bilgi sanmak.
+
+  - id: TUR-GORSEL-OKUMA
+    ders: turkce
+    ad: Görsel / grafik / tablo yorumlama
+    uniteler: [tur.gorsel_okuma]
+    ipuclari: ["grafik", "tablo", "görsel", "afiş", "görseldeki", "şekildeki"]
+    hedef_sure_sn: 90
+    celdiriciler: [DIS-BILGI, TERS-ILISKI]
+    taktikler:
+      - Önce eksen/satır başlıklarını ve birimi oku, sonra soru kökünü; veriye bakmadan seçeneklere geçme.
+      - Seçeneklerdeki her yargı için görselde tek bir veri noktası göster; gösteremiyorsan ele.
+
+  - id: TUR-SOZCUK-ANLAM
+    ders: turkce
+    ad: Sözcükte anlam (gerçek, mecaz, terim, yan anlam)
+    uniteler: [tur.sozcukte_anlam]
+    ipuclari: ["mecaz", "gerçek anlam", "terim anlam", "yan anlam", "altı çizili sözcü", "altı çizili kelime", "anlamca en yakın", "anlamında kullanıl"]
+    hedef_sure_sn: 50
+    celdiriciler: [SOZCUK-AVCILIGI, KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Altı çizili sözcüğün yerine bir eş anlamlı koy; her seçenekte aynı sözcüğü yerine koyup anlam korunuyor mu dene.
+      - Mecaz-yan anlam ayrımında "somut benzerlik varsa yan anlam, soyut aktarım varsa mecaz" ölçütünü kullan.
+
+  - id: TUR-DEYIM-ATASOZU
+    ders: turkce
+    ad: Deyim ve atasözü
+    uniteler: [tur.sozcukte_anlam]
+    ipuclari: ["deyim", "atasözü", "özdeyiş", "vecize"]
+    hedef_sure_sn: 55
+    celdiriciler: [SOZCUK-AVCILIGI]
+    taktikler:
+      - Deyimi durum cümlesine çevir ("…olduğunda kullanılır") ve metindeki durumla eşleştir.
+
+  - id: TUR-CUMLE-ANLAM
+    ders: turkce
+    ad: Cümlede anlam ilişkileri (neden-sonuç, amaç, koşul, karşılaştırma, öznel-nesnel)
+    uniteler: [tur.cumlede_anlam]
+    ipuclari: ["neden-sonuç", "amaç-sonuç", "koşul", "karşılaştırma", "öznel", "nesnel", "örtülü", "ön yargı", "varsayım", "benzetme yapıl", "sebep", "öneri", "tahmin", "pişmanlık", "eleştiri"]
+    hedef_sure_sn: 60
+    celdiriciler: [KAVRAM-KARISIKLIGI, TERS-ILISKI]
+    taktikler:
+      - Neden-sonuç ile amaç-sonuç ayrımı için "-mek için / diye" (amaç) ile "-dığı için / -den dolayı" (neden) eklerini tara.
+      - 'Nesnel yargıda kanıtlanabilirlik testini uygula - "Bunu herkes ölçüp doğrulayabilir mi?"'
+
+  - id: TUR-SOZ-SANATLARI
+    ders: turkce
+    ad: Söz sanatları
+    uniteler: [tur.soz_sanatlari]
+    ipuclari: ["kişileştirme", "benzetme", "abartma", "konuşturma", "söz sanatı", "sanatına başvurul"]
+    hedef_sure_sn: 50
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Kişileştirme ile konuşturma farkı - varlık konuşuyorsa konuşturma aynı zamanda kişileştirmedir; tersi her zaman geçerli değil.
+      - Benzetmede benzeyen, kendisine benzetilen ve benzetme edatını (gibi, kadar) ara.
+
+  - id: TUR-METIN-TURU
+    ders: turkce
+    ad: Metin türleri
+    uniteler: [tur.metin_turleri]
+    ipuclari: ["metin türü", "türüne örnek", "türünün özellik", "deneme", "fıkra", "makale", "biyografi", "otobiyografi", "gezi yazısı", "anı"]
+    hedef_sure_sn: 60
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Anı-otobiyografi-biyografi ayrımını anlatıcı ve kapsam üzerinden yap (kim anlatıyor, hayatın tamamı mı bir kesiti mi).
+
+  - id: TUR-FIILIMSI
+    ders: turkce
+    ad: Fiilimsiler
+    uniteler: [tur.fiilimsiler]
+    ipuclari: ["fiilimsi", "isim-fiil", "sıfat-fiil", "zarf-fiil"]
+    hedef_sure_sn: 60
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Ekleri üç kutuda ezberle (-ma/-ış/-mak | -an/-ası/-maz/-ar/-dık/-acak/-miş | -ıp/-arak/-madan/-ınca/-dıkça/-alı/-ken/-casına/-meden).
+      - Kalıcı isim olmuş sözcükleri (dondurma, çakmak, yazar) fiilimsi saymama tuzağına dikkat et.
+
+  - id: TUR-CUMLE-OGELERI
+    ders: turkce
+    ad: Cümlenin ögeleri
+    uniteler: [tur.cumlenin_ogeleri]
+    ipuclari: ["ögesi", "ögeleri", "öge", "özne", "yüklem", "nesne", "dolaylı tümleç", "zarf tümleci"]
+    hedef_sure_sn: 60
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Her zaman önce yüklemi bul, ardından soruları yükleme sor (kim/ne -> özne, neyi/ne -> nesne, nereye/nerede/nereden -> dolaylı tümleç).
+      - Öge sorularında kelime değil kelime grubu ayırdığını unutma.
+
+  - id: TUR-FIIL-CATISI
+    ders: turkce
+    ad: Fiilde çatı
+    uniteler: [tur.fiil_catisi]
+    ipuclari: ["etken", "edilgen", "geçişli", "geçişsiz", "çatı"]
+    hedef_sure_sn: 60
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Özne-yüklem ilişkisi (etken/edilgen) için "gerçek özne belli mi?"; nesne-yüklem ilişkisi (geçişli/geçişsiz) için yükleme "neyi/kimi" sor.
+
+  - id: TUR-CUMLE-TURU
+    ders: turkce
+    ad: Cümle türleri
+    uniteler: [tur.cumle_turleri]
+    ipuclari: ["basit cümle", "birleşik cümle", "sıralı cümle", "bağlı cümle", "isim cümlesi", "fiil cümlesi", "kurallı", "devrik", "eksiltili", "yapısı bakımından", "anlamı bakımından"]
+    hedef_sure_sn: 60
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Yapı sorusunda yüklem sayısını ve fiilimsi varlığını say; bağlaç + iki yüklem = bağlı cümle, virgül/noktalı virgülle ayrılmış iki yüklem = sıralı cümle.
+
+  - id: TUR-YAZIM
+    ders: turkce
+    ad: Yazım kuralları
+    uniteler: [tur.yazim]
+    ipuclari: ["yazım yanlışı", "yazımı", "yazım kuralı", "yanlış yazıl"]
+    hedef_sure_sn: 45
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - En sık sorulan beşli - "de/da" ve "ki" ayrı/bitişik, sayıların yazımı, büyük harfler, kısaltmalara gelen ekler, birleşik kelimeler.
+
+  - id: TUR-NOKTALAMA
+    ders: turkce
+    ad: Noktalama işaretleri
+    uniteler: [tur.noktalama]
+    ipuclari: ["noktalama", "virgül", "noktalı virgül", "iki nokta", "kesme işareti", "tırnak işareti", "yay ayraç", "kısa çizgi", "üç nokta", "ayraç"]
+    hedef_sure_sn: 50
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Boş bırakılan yerlere işaret yerleştirme sorularında seçenekleri tek tek dene; bir yer yanlışsa seçeneğin tamamı elenir.
+
+  - id: TUR-ANLATIM-BOZUKLUGU
+    ders: turkce
+    ad: Anlatım bozuklukları
+    uniteler: [tur.anlatim_bozuklugu]
+    ipuclari: ["anlatım bozukluğu", "anlatım bozuk"]
+    hedef_sure_sn: 60
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Kontrol sırası - gereksiz sözcük, anlamca çelişen sözcükler, özne-yüklem uyumu, ortak öge eksikliği.
+
+  # ---------------------------------------------------------------- MATEMATİK
+  - id: MAT-GERCEK-HAYAT
+    ders: matematik
+    ad: Gerçek hayat bağlamlı uzun problem (modelleme)
+    ipuclari: ["\\btl\\b", "lira", "\\bkm\\b", "metre", "\\bcm\\b", "\\bkg\\b", "litre", "dakika", "saat", "gün", "fiyat", "indirim", "ücret", "yaş"]
+    min_uzunluk: 250
+    hedef_sure_sn: 150
+    celdiriciler: [ARA-SONUC, BIRIM-OLCEK]
+    taktikler:
+      - Metni ikinci kez okumamak için ilk okumada her sayısal veriyi kenara "ne = değer (birim)" şeklinde listele.
+      - Soru kökündeki istenen büyüklüğü işlem başlamadan çerçeve içine al; ara sonuç çeldiricisine karşı son adımda köke geri dön.
+      - Seçeneklerden geriye doğru deneme (seçeneği denkleme koyma) çoğu LGS probleminde daha hızlıdır.
+
+  - id: MAT-GORSEL-MODEL
+    ders: matematik
+    ad: Görsel model / şekil üzerinden akıl yürütme
+    ipuclari: ["şekil", "görsel", "model", "karo", "parça", "kare şeklinde", "dikdörtgen şeklinde", "şeklindeki"]
+    hedef_sure_sn: 135
+    celdiriciler: [ARA-SONUC, BIRIM-OLCEK]
+    taktikler:
+      - Şekildeki her bilinmeyen uzunluğa harf ver ve verilen bilgiyle denklem kur; göz kararı ölçüm yapma, LGS görselleri ölçekli değildir.
+      - Cebir karosu/alan modeli sorularında modeli önce cebirsel ifadeye çevir, sonra işlem yap.
+
+  - id: MAT-KATLAMA-KESME
+    ders: matematik
+    ad: Katlama, kesme ve parçalama
+    ipuclari: ["katla", "kesil", "kesilerek", "kâğıt", "kağıt", "parçalara ayr"]
+    hedef_sure_sn: 150
+    celdiriciler: [ARA-SONUC]
+    taktikler:
+      - Her katlamadan sonra şeklin yeni hâlini küçük bir kroki ile çiz; katlama çizgisi simetri ekseni gibi davranır.
+
+  - id: MAT-TABLO-GRAFIK
+    ders: matematik
+    ad: Tablo / grafik yorumlama
+    uniteler: [mat.veri_analizi]
+    ipuclari: ["tablo", "grafik"]
+    hedef_sure_sn: 120
+    celdiriciler: [BIRIM-OLCEK, ARA-SONUC]
+    taktikler:
+      - Daire grafiğinde açı ↔ yüzde ↔ miktar dönüşümünü (360° = %100 = toplam) tek oran satırıyla yap.
+      - Grafik ekseninde ölçek aralığını (1'er mi, 5'er mi) mutlaka kontrol et.
+
+  - id: MAT-SIRALAMA-KARSILASTIRMA
+    ders: matematik
+    ad: Sayıları sıralama / karşılaştırma
+    ipuclari: ["sıralaması", "sıralanışı", "büyükten küçüğe", "küçükten büyüğe", "doğru sıralama"]
+    hedef_sure_sn: 90
+    celdiriciler: [ISARET-YON]
+    taktikler:
+      - Üslü ifadeleri aynı tabana ya da aynı üsse, kareköklü ifadeleri kök içine alarak karşılaştır.
+
+  - id: MAT-EN-AZ-EN-COK
+    ders: matematik
+    ad: En az / en çok (optimizasyon)
+    ipuclari: ["en az", "en çok", "en fazla", "en büyük", "en küçük"]
+    hedef_sure_sn: 135
+    celdiriciler: [ARA-SONUC, ISARET-YON]
+    taktikler:
+      - En çok/en az sorularında seçenekleri uç değerden başlayarak dene (en çok soruluyorsa en büyük seçenekten başla).
+      - EBOB-EKOK ayrımı - "parçalara bölme, en büyük ölçü" → EBOB; "birlikte tekrar, en küçük ortak süre" → EKOK.
+
+  - id: MAT-OLASILIK-DURUM
+    ders: matematik
+    ad: Olasılık durum analizi
+    uniteler: [mat.olasilik]
+    ipuclari: ["olasılı"]
+    hedef_sure_sn: 110
+    celdiriciler: [ARA-SONUC, KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Önce örnek uzayı (tüm olası durumlar) yaz; soru bir değişiklik (ekleme/çıkarma) içeriyorsa örnek uzayı güncellemeyi unutma.
+
+  # ------------------------------------------------------------------- FEN
+  - id: FEN-DENEY
+    ders: fen
+    ad: Deney düzeneği ve değişken analizi
+    ipuclari: ["deney", "düzenek", "değişken", "hipotez", "kontrol", "bağımlı", "bağımsız", "gözlem"]
+    hedef_sure_sn: 110
+    celdiriciler: [TERS-ILISKI, DIS-BILGI]
+    taktikler:
+      - Düzenekleri tablo gibi oku - hangi nicelik değişiyor (bağımsız), hangisi ölçülüyor (bağımlı), hangileri sabit (kontrol).
+      - Bir değişkenin etkisini test etmek için yalnızca o değişkenin farklı olduğu iki düzeneği seç.
+
+  - id: FEN-GRAFIK-TABLO
+    ders: fen
+    ad: Grafik / tablo yorumlama
+    ipuclari: ["grafik", "tablo"]
+    hedef_sure_sn: 100
+    celdiriciler: [TERS-ILISKI, BIRIM-OLCEK]
+    taktikler:
+      - Grafikte eğimin (artış hızı) ve düz çizginin (hal değişimi, sabit değer) anlamını yorumla; sıcaklık-zaman grafiklerinde düz bölge hal değişimidir.
+
+  - id: FEN-MODEL-GORSEL
+    ders: fen
+    ad: Model / görsel / şema yorumlama
+    ipuclari: ["model", "şekil", "görsel", "şema", "şekildeki", "modeli"]
+    hedef_sure_sn: 100
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Modeldeki her sembolün neyi temsil ettiğini (lejant) önce çöz; DNA, periyodik tablo kesiti ve basit makine görsellerinde lejant sorunun yarısıdır.
+
+  - id: FEN-KALITIM
+    ders: fen
+    ad: Kalıtım / çaprazlama
+    uniteler: [fen.dna_genetik]
+    ipuclari: ["çaprazla", "genotip", "fenotip", "baskın", "çekinik", "saf döl", "melez", "yavru"]
+    hedef_sure_sn: 110
+    celdiriciler: [KAVRAM-KARISIKLIGI, ARA-SONUC]
+    taktikler:
+      - Punnett karesini mutlaka çiz; oran soruluyorsa sonucu 4 üzerinden yaz, sonra sadeleştir.
+
+  - id: FEN-DALLANMIS-AGAC
+    ders: fen
+    ad: Doğru/Yanlış - dallanmış ağaç, kutucuk ve kodlama
+    ipuclari: ["doğru \\(d\\)", "yanlış \\(y\\)", "dallanmış", "çıkış", "kutucu", "kodla"]
+    hedef_sure_sn: 120
+    celdiriciler: [KISMEN-DOGRU, KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Her ifadenin yanına önce D/Y yaz, sonra ağacı izle; ilk ifadede hata yaparsan tüm yol yanlış gider, ilk ifadeyi iki kez kontrol et.
+
+  - id: FEN-GUNLUK-HAYAT
+    ders: fen
+    ad: Günlük hayat senaryosu
+    ipuclari: ["öğrenci", "öğretmen", "evde", "mutfak", "günlük hayat", "arkadaş", "sınıf"]
+    min_uzunluk: 250
+    hedef_sure_sn: 110
+    celdiriciler: [DIS-BILGI, METINDE-VAR-KOKU-KARSILAMAZ]
+    taktikler:
+      - Senaryoyu bilimsel kavrama çevir (ör. "düdüklü tencere" → basınç-kaynama noktası) ve soruyu kavram üzerinden çöz.
+
+  # --------------------------------------------------------------- İNKILAP
+  - id: INK-KRONOLOJI
+    ders: inkilap
+    ad: Kronoloji / olay sıralama
+    ipuclari: ["kronolojik", "sıralaması", "sıralanış", "tarih sırası", "zaman çizelgesi", "hangisinden önce", "hangisinden sonra"]
+    hedef_sure_sn: 60
+    celdiriciler: [KRONOLOJI]
+    taktikler:
+      - Kilometre taşları - Mondros (1918) → Samsun (1919) → Kongreler → TBMM (1920) → Sakarya (1921) → Büyük Taarruz (1922) → Lozan (1923) → Cumhuriyet (1923).
+
+  - id: INK-NEDEN-SONUC
+    ders: inkilap
+    ad: Neden-sonuç / amaç ilişkisi
+    ipuclari: ["nedeni", "nedenleri", "sebebi", "sonucu", "sonucunda", "amacı", "amaçla", "etkisi"]
+    hedef_sure_sn: 55
+    celdiriciler: [TERS-ILISKI, METINDE-VAR-KOKU-KARSILAMAZ]
+    taktikler:
+      - Olayı "önce ne oldu → ne değişti" şeklinde iki adımla anlat; seçenekte yön ters çevrilmişse ele.
+
+  - id: INK-METIN-YORUM
+    ders: inkilap
+    ad: Tarihî metin / belge / söz yorumlama
+    ipuclari: ["metin", "söz", "sözleri", "konuşma", "nutuk", "telgraf", "genelge", "kararlar", "maddeler", "belge"]
+    hedef_sure_sn: 65
+    celdiriciler: [DIS-BILGI, KAPSAM-GENIS]
+    taktikler:
+      - Bu kalıp aslında bir Türkçe paragraf sorusudur; önce metinden cevaplanabilir mi diye bak, tarih bilgisini sadece eleme için kullan.
+
+  - id: INK-ILKE-ESLESTIRME
+    ders: inkilap
+    ad: Atatürk ilkeleri ile inkılapları ilişkilendirme
+    uniteler: [ink.ataturkculuk]
+    ipuclari: ["cumhuriyetçilik", "milliyetçilik", "halkçılık", "devletçilik", "laiklik", "inkılapçılık", "ilkesi", "ilkeleri"]
+    hedef_sure_sn: 55
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Her ilke için anahtar soru - Cumhuriyetçilik "yönetimi kim seçiyor?", Halkçılık "eşitlik/ayrıcalık yok", Laiklik "din ve devlet işleri ayrı", Devletçilik "ekonomide devlet öncü".
+
+  - id: INK-KAVRAM
+    ders: inkilap
+    ad: Tarih kavramları
+    ipuclari: ["kavram", "manda", "himaye", "ulusal egemenlik", "milli egemenlik", "bağımsızlık", "kapitülasyon"]
+    hedef_sure_sn: 50
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Manda-himaye, ulusal egemenlik-ulusal bağımsızlık gibi çiftler için karşılaştırma tablosu tut.
+
+  - id: INK-HARITA-GORSEL
+    ders: inkilap
+    ad: Harita / görsel / karikatür
+    ipuclari: ["harita", "görsel", "fotoğraf", "afiş", "karikatür"]
+    hedef_sure_sn: 60
+    celdiriciler: [DIS-BILGI]
+    taktikler:
+      - Görseldeki tarih, yer adı ve sembolleri ipucu olarak listele; seçenekleri bu ipuçlarıyla sınırla.
+
+  # ------------------------------------------------------------------ DİN
+  - id: DIN-AYET-HADIS
+    ders: din
+    ad: Ayet / hadis yorumlama
+    ipuclari: ["ayet", "hadis", "buyurul", "meal", "sure"]
+    hedef_sure_sn: 60
+    celdiriciler: [DIS-BILGI, KAPSAM-GENIS, METINDE-VAR-KOKU-KARSILAMAZ]
+    taktikler:
+      - Ayet/hadiste geçen emir veya tavsiyeyi tek kelimeye indir (paylaşma, sorumluluk, tevekkül...) ve seçeneklerde o değeri ara.
+      - Birden çok metin verilmişse "hepsinde ortak olan" değeri bul; yalnızca birinde geçen değer çeldiricidir.
+
+  - id: DIN-KAVRAM
+    ders: din
+    ad: Dinî kavramlar
+    ipuclari: ["kavram", "kader", "kaza", "tevekkül", "ecel", "rızık", "zekât", "zekat", "sadaka", "fitre", "infak"]
+    hedef_sure_sn: 50
+    celdiriciler: [KAVRAM-KARISIKLIGI]
+    taktikler:
+      - Kader (Allah'ın ezelde bilip takdir etmesi) - kaza (takdirin zamanı gelince gerçekleşmesi) ayrımını örnek cümleyle ezberle.
+
+  - id: DIN-DURUM-DAVRANIS
+    ders: din
+    ad: Günlük hayat durumu / davranış değerlendirme
+    ipuclari: ["davranış", "tutum", "hangisi uygun", "örnek davranış", "yaptığı"]
+    hedef_sure_sn: 55
+    celdiriciler: [KISMEN-DOGRU]
+    taktikler:
+      - Senaryodaki kişinin davranışını ünitede işlenen değerle (tevekkül, yardımlaşma, sorumluluk) eşleştir.
+
+  - id: DIN-PEYGAMBER-ORNEKLIK
+    ders: din
+    ad: Peygamber örnekliği / kıssa
+    ipuclari: ["hz\\.", "peygamber", "kıssa"]
+    hedef_sure_sn: 55
+    celdiriciler: [KAPSAM-DAR, DIS-BILGI]
+    taktikler:
+      - Kıssada vurgulanan ahlaki ilkeyi (sabır, dürüstlük, merhamet) bul; olayın ayrıntıları çoğunlukla çeldiricidir.
+
+  # ------------------------------------------------------------- İNGİLİZCE
+  - id: ING-DIYALOG
+    ders: ingilizce
+    ad: Dialogue completion
+    ipuclari: ["dialogue", "conversation", "complete", "blank", "best completes", "response", "reply"]
+    hedef_sure_sn: 60
+    celdiriciler: [METINDE-VAR-KOKU-KARSILAMAZ]
+    taktikler:
+      - Boşluktan sonraki cümleyi mutlaka oku; cevap çoğu zaman boşluğun ardından gelen tepkiyle uyumlu olandır.
+
+  - id: ING-OKUMA
+    ders: ingilizce
+    ad: Reading comprehension
+    ipuclari: ["according to", "the text", "passage", "e-mail", "message", "article", "blog"]
+    hedef_sure_sn: 70
+    celdiriciler: [DIS-BILGI, SOZCUK-AVCILIGI, KISMEN-DOGRU]
+    taktikler:
+      - Önce soruyu oku, sonra metinde anahtar kelime tara (scanning); metnin tamamını çevirmeye çalışma.
+
+  - id: ING-GORSEL-TABLO
+    ders: ingilizce
+    ad: Chart / table / visual
+    ipuclari: ["chart", "table", "graph", "survey", "poster", "picture", "results"]
+    hedef_sure_sn: 60
+    celdiriciler: [TERS-ILISKI, KAPSAM-GENIS]
+    taktikler:
+      - '"most, least, both, neither, only" gibi karşılaştırma sözcüklerinin tablodaki karşılığını tek tek doğrula.'
+
+  - id: ING-CIKARIM
+    ders: ingilizce
+    ad: True/false / inference
+    ipuclari: ["\\btrue\\b", "\\bfalse\\b", "infer", "cannot be", "can't be", "not mentioned", "correct"]
+    hedef_sure_sn: 65
+    celdiriciler: [DIS-BILGI, OLUMSUZ-KOK]
+    taktikler:
+      - Soruda "NOT / CANNOT" varsa altını çiz; İngilizce olumsuz kök Türkçeden daha kolay gözden kaçar.
+
+  - id: ING-KELIME
+    ders: ingilizce
+    ad: Vocabulary in context
+    ipuclari: ["means", "meaning", "underlined", "refers to", "word", "phrase"]
+    hedef_sure_sn: 45
+    celdiriciler: [SOZCUK-AVCILIGI]
+    taktikler:
+      - Kelimeyi bilmesen de cümledeki olumlu/olumsuz tonu kullanarak seçenekleri ikiye indir.
+
+  # ----------------------------------------------------- GENEL (ders üstü)
+  - id: GEN-OLUMSUZ-KOK
+    ders: genel
+    ad: Olumsuz soru kökü
+    ipuclari: ["değildir", "yoktur", "yanlıştır", "söylenemez", "çıkarılamaz", "ulaşılamaz", "değinilmemiştir", "olamaz", "gösterilemez", "verilmemiştir", "beklenemez", "kullanılmamıştır", "yapılmamıştır", "\\bnot\\b", "cannot", "can't"]
+    hedef_sure_sn: null
+    celdiriciler: [OLUMSUZ-KOK]
+    taktikler:
+      - Soru kökündeki olumsuz eki daire içine al; her seçeneğin yanına D/Y yaz, tek Y (veya tek D) cevaptır.
+
+  - id: GEN-ONCULLU
+    ders: genel
+    ad: Öncüllü (I, II, III) soru
+    ipuclari: ["(?m)^\\s*[iı]{1,3}v?\\.\\s", "\\byalnız [iı]{1,3}v?\\b", "\\b[iı] ve [iı]{2,3}\\b", "\\b[iı]{2} ve [iı]{3}\\b", "\\b[iı], [iı]{2} ve [iı]{3}\\b"]
+    hedef_sure_sn: null
+    celdiriciler: [KISMEN-DOGRU]
+    taktikler:
+      - En kolay öncülü önce değerlendir ve seçenekleri hemen ele; çoğu zaman iki öncül cevabı belirlemeye yeter.
+
+  - id: GEN-KESINLIK
+    ders: genel
+    ad: Kesinlik soran kök ("kesinlikle", "her zaman")
+    ipuclari: ["kesinlikle", "kesin olarak", "her zaman", "mutlaka"]
+    hedef_sure_sn: null
+    celdiriciler: [KAPSAM-GENIS, KISMEN-DOGRU]
+    taktikler:
+      - Olası tüm durumları düşün; yalnızca bazı durumlarda doğru olan seçenek "kesinlikle" sorusunun cevabı olamaz.
+
+  - id: GEN-NUMARALI-CUMLE
+    ders: genel
+    ad: Numaralanmış cümle / bölüm
+    ipuclari: ["numaralanmış", "numaralı", "\\(([iı]{1,3}|[iı]v|v)\\)"]
+    hedef_sure_sn: null
+    celdiriciler: [SOZCUK-AVCILIGI]
+    taktikler:
+      - Numaralı cümle sorularında her numaranın yanına kısa etiket (neden, örnek, yargı) yaz; seçenekler bu etiketlerle hızla elenir.
+
+  - id: GEN-UZUN-METIN
+    ders: genel
+    ad: Uzun metinli soru (okuma yükü yüksek)
+    ipuclari: [".*"]
+    min_uzunluk: 600
+    hedef_sure_sn: null
+    celdiriciler: []
+    taktikler:
+      - Önce soru kökünü, sonra metni amaçlı oku; bu sorulara ilk turda girip kendine süre sınırı koy, sınır aşılırsa işaretleyip ikinci tura bırak.

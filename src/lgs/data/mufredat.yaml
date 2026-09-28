@@ -1,0 +1,362 @@
+# 8. sınıf öğretim programlarına (2018 programı) göre LGS konu haritası.
+#
+# Her ünite:
+#   id:                 soru bankasında kullanılan kalıcı kimlik (ders.konu)
+#   kod:                MEB kazanım kodu öneki (biliniyorsa)
+#   donem:              ünitenin işlendiği dönem (1/2); yalnızca kesin bilinenlerde dolu
+#   kazanimlar:         {kod, ifade} listesi; kazanım düzeyinde etiketleme için
+#   alt_konular:        daha kaba ayrım (kod biliniyorsa kodla)
+#   anahtar_kelimeler:  otomatik etiketleyicinin kullandığı küçük harfli ipuçları
+#
+# Türkçe beceri temelli ölçüldüğü için Türkçe konuları çoğunlukla soru kalıbı
+# üzerinden (soru_kaliplari.yaml -> uniteler) atanır.
+
+turkce:
+  - id: tur.sozcukte_anlam
+    ad: Sözcükte Anlam (gerçek, mecaz, terim, yan anlam; deyim, atasözü)
+    anahtar_kelimeler: [mecaz, gerçek anlam, terim anlam, yan anlam, deyim, atasözü, altı çizili sözcük, altı çizili söz]
+  - id: tur.cumlede_anlam
+    ad: Cümlede Anlam (anlam ilişkileri, öznel/nesnel, örtülü anlam)
+    anahtar_kelimeler: [neden-sonuç, amaç-sonuç, koşul, karşılaştırma, öznel, nesnel, örtülü, ön yargı, varsayım]
+  - id: tur.paragraf
+    ad: Paragraf ve Metin Anlama (ana düşünce, yardımcı düşünce, konu, başlık, yapı)
+    anahtar_kelimeler: [ana düşünce, asıl anlatılmak istenen, konusu, başlık, akışını bozan, paragraf]
+  - id: tur.soz_sanatlari
+    ad: Söz Sanatları
+    anahtar_kelimeler: [kişileştirme, benzetme, abartma, konuşturma, söz sanatı]
+  - id: tur.metin_turleri
+    ad: Metin Türleri
+    anahtar_kelimeler: [hikâye, roman, deneme, fıkra, makale, biyografi, otobiyografi, anı, gezi yazısı, masal, şiir, tiyatro]
+  - id: tur.fiilimsiler
+    ad: Fiilimsiler
+    anahtar_kelimeler: [fiilimsi, isim-fiil, sıfat-fiil, zarf-fiil]
+  - id: tur.cumlenin_ogeleri
+    ad: Cümlenin Ögeleri
+    anahtar_kelimeler: [öge, özne, yüklem, nesne, dolaylı tümleç, zarf tümleci]
+  - id: tur.fiil_catisi
+    ad: Fiilde Çatı
+    anahtar_kelimeler: [etken, edilgen, geçişli, geçişsiz, çatı]
+  - id: tur.cumle_turleri
+    ad: Cümle Türleri
+    anahtar_kelimeler: [basit cümle, birleşik cümle, sıralı cümle, bağlı cümle, isim cümlesi, fiil cümlesi, kurallı, devrik, eksiltili]
+  - id: tur.yazim
+    ad: Yazım Kuralları
+    anahtar_kelimeler: [yazım yanlışı, yazımı]
+  - id: tur.noktalama
+    ad: Noktalama İşaretleri
+    anahtar_kelimeler: [noktalama, virgül, noktalı virgül, iki nokta, kesme işareti, tırnak işareti, yay ayraç, kısa çizgi, üç nokta]
+  - id: tur.anlatim_bozuklugu
+    ad: Anlatım Bozuklukları
+    anahtar_kelimeler: [anlatım bozukluğu]
+  - id: tur.sozel_mantik
+    ad: Sözel Mantık ve Muhakeme
+    anahtar_kelimeler: [bilgilere göre, kesinlikle, sıralama, oturma, yerleştir]
+  - id: tur.gorsel_okuma
+    ad: Görsel, Grafik ve Tablo Okuma
+    anahtar_kelimeler: [grafik, tablo, görsel, afiş]
+
+matematik:
+  - id: mat.carpanlar_katlar
+    ad: Çarpanlar ve Katlar
+    kod: M.8.1.1
+    donem: 1
+    kazanimlar:
+      - {kod: M.8.1.1.1, ifade: "Verilen pozitif tam sayıların pozitif tam sayı çarpanlarını bulur, pozitif tam sayıların pozitif tam sayı çarpanlarını üslü ifadelerin çarpımı şeklinde yazar."}
+      - {kod: M.8.1.1.2, ifade: "İki doğal sayının en büyük ortak bölenini (EBOB) ve en küçük ortak katını (EKOK) hesaplar, ilgili problemleri çözer."}
+      - {kod: M.8.1.1.3, ifade: "Verilen iki doğal sayının aralarında asal olup olmadığını belirler."}
+    anahtar_kelimeler: [ebob, ekok, asal, çarpan, '/\bkatı(dır|nı|ndan)?\b/', katları, ortak bölen, ortak kat, aralarında asal, bölen]
+  - id: mat.uslu_ifadeler
+    ad: Üslü İfadeler
+    kod: M.8.1.2
+    donem: 1
+    kazanimlar:
+      - {kod: M.8.1.2.1, ifade: "Tam sayıların, tam sayı kuvvetlerini hesaplar."}
+      - {kod: M.8.1.2.2, ifade: "Üslü ifadelerle ilgili temel kuralları anlar, birbirine denk ifadeler oluşturur."}
+      - {kod: M.8.1.2.3, ifade: "Sayıların ondalık gösterimlerini 10'un tam sayı kuvvetlerini kullanarak çözümler."}
+      - {kod: M.8.1.2.4, ifade: "Verilen bir sayıyı 10'un farklı tam sayı kuvvetlerini kullanarak ifade eder."}
+      - {kod: M.8.1.2.5, ifade: "Çok büyük ve çok küçük sayıları bilimsel gösterimle ifade eder ve karşılaştırır."}
+    anahtar_kelimeler: [üslü, kuvveti, kuvvetleri, bilimsel gösterim, üssü]
+  - id: mat.karekoklu_ifadeler
+    ad: Kareköklü İfadeler
+    kod: M.8.1.3
+    donem: 1
+    kazanimlar:
+      - {kod: M.8.1.3.1, ifade: "Tam kare pozitif tam sayılarla bu sayıların karekökleri arasındaki ilişkiyi belirler."}
+      - {kod: M.8.1.3.2, ifade: "Tam kare olmayan kareköklü bir sayının hangi iki doğal sayı arasında olduğunu belirler."}
+      - {kod: M.8.1.3.3, ifade: "Kareköklü bir ifadeyi a√b şeklinde yazar ve a√b şeklindeki ifadede katsayıyı kök içine alır."}
+      - {kod: M.8.1.3.4, ifade: "Kareköklü ifadelerde çarpma ve bölme işlemlerini yapar."}
+      - {kod: M.8.1.3.5, ifade: "Kareköklü ifadelerde toplama ve çıkarma işlemlerini yapar."}
+      - {kod: M.8.1.3.6, ifade: "Kareköklü bir ifade ile çarpıldığında, sonucu bir doğal sayı yapan çarpanlara örnek verir."}
+      - {kod: M.8.1.3.7, ifade: "Ondalık ifadelerin kareköklerini belirler."}
+      - {kod: M.8.1.3.8, ifade: "Gerçek sayıları tanır, rasyonel ve irrasyonel sayılarla ilişkilendirir."}
+    anahtar_kelimeler: [karekök, "√", tam kare, irrasyonel, rasyonel, gerçek sayı]
+  - id: mat.veri_analizi
+    ad: Veri Analizi
+    kod: M.8.4.1
+    donem: 1
+    kazanimlar:
+      - {kod: M.8.4.1.1, ifade: "En fazla üç veri grubuna ait çizgi ve sütun grafiklerini yorumlar."}
+      - {kod: M.8.4.1.2, ifade: "Verileri sütun, daire veya çizgi grafiği ile gösterir ve bu gösterimler arasında uygun olan dönüşümleri yapar."}
+    anahtar_kelimeler: [sütun grafiği, çizgi grafiği, daire grafiği, grafik, veri]
+  - id: mat.olasilik
+    ad: Basit Olayların Olma Olasılığı
+    kod: M.8.5.1
+    donem: 1
+    kazanimlar:
+      - {kod: M.8.5.1.1, ifade: "Bir olaya ait olası durumları belirler."}
+      - {kod: M.8.5.1.2, ifade: "“Daha fazla”, “eşit”, “daha az” olasılıklı olayları ayırt eder, örnek verir."}
+      - {kod: M.8.5.1.3, ifade: "Eşit şansa sahip olan olaylarda her bir çıktının olasılık değerinin eşit olduğunu ve bu değerin 1/n olduğunu açıklar."}
+      - {kod: M.8.5.1.4, ifade: "Olasılık değerinin 0 ile 1 arasında (0 ve 1 dâhil) olduğunu anlar."}
+      - {kod: M.8.5.1.5, ifade: "Basit bir olayın olma olasılığını hesaplar."}
+    anahtar_kelimeler: [olasılık, olasılığı, rastgele, zar, torba, eşit şans, kesin olay, imkânsız olay]
+  - id: mat.cebirsel_ifadeler
+    ad: Cebirsel İfadeler ve Özdeşlikler
+    kod: M.8.2.1
+    donem: 1
+    kazanimlar:
+      - {kod: M.8.2.1.1, ifade: "Basit cebirsel ifadeleri anlar ve farklı biçimlerde yazar."}
+      - {kod: M.8.2.1.2, ifade: "Cebirsel ifadelerin çarpımını yapar."}
+      - {kod: M.8.2.1.3, ifade: "Özdeşlikleri modellerle açıklar."}
+      - {kod: M.8.2.1.4, ifade: "Cebirsel ifadeleri çarpanlara ayırır."}
+    anahtar_kelimeler: [cebirsel ifade, özdeşlik, çarpanlarına ayır, terim, katsayı, iki kare farkı, cebir karo]
+  - id: mat.dogrusal_denklemler
+    ad: Doğrusal Denklemler
+    kod: M.8.2.2
+    donem: 2
+    kazanimlar:
+      - {kod: M.8.2.2.1, ifade: "Birinci dereceden bir bilinmeyenli denklemleri çözer."}
+      - {kod: M.8.2.2.2, ifade: "Koordinat sistemini özellikleriyle tanır ve sıralı ikilileri gösterir."}
+      - {kod: M.8.2.2.3, ifade: "Aralarında doğrusal ilişki bulunan iki değişkenden birinin diğerine bağlı olarak nasıl değiştiğini tablo ve denklem ile ifade eder."}
+      - {kod: M.8.2.2.4, ifade: "Doğrusal denklemlerin grafiğini çizer."}
+      - {kod: M.8.2.2.5, ifade: "Doğrusal ilişki içeren gerçek hayat durumlarına ait denklem, tablo ve grafiği oluşturur ve yorumlar."}
+      - {kod: M.8.2.2.6, ifade: "Doğrunun eğimini modellerle açıklar, doğrusal denklemleri ve grafiklerini eğimle ilişkilendirir."}
+    anahtar_kelimeler: [denklem, doğrusal, eğim, koordinat, sıralı ikili, x ekseni, y ekseni, orijin, doğru grafiği]
+  - id: mat.esitsizlikler
+    ad: Eşitsizlikler
+    kod: M.8.2.3
+    donem: 2
+    kazanimlar:
+      - {kod: M.8.2.3.1, ifade: "Birinci dereceden bir bilinmeyenli eşitsizlik içeren günlük hayat durumlarına uygun matematik cümleleri yazar."}
+      - {kod: M.8.2.3.2, ifade: "Birinci dereceden bir bilinmeyenli eşitsizlikleri sayı doğrusunda gösterir."}
+      - {kod: M.8.2.3.3, ifade: "Birinci dereceden bir bilinmeyenli eşitsizlikleri çözer."}
+    anahtar_kelimeler: [eşitsizlik, sayı doğrusu, "≤", "≥"]
+  - id: mat.ucgenler
+    ad: Üçgenler
+    kod: M.8.3.1
+    donem: 2
+    kazanimlar:
+      - {kod: M.8.3.1.1, ifade: "Üçgende kenarortay, açıortay ve yüksekliği inşa eder."}
+      - {kod: M.8.3.1.2, ifade: "Üçgenin iki kenar uzunluğunun toplamı veya farkı ile üçüncü kenarının uzunluğunu ilişkilendirir."}
+      - {kod: M.8.3.1.3, ifade: "Üçgenin kenar uzunlukları ile bu kenarların karşısındaki açıların ölçülerini ilişkilendirir."}
+      - {kod: M.8.3.1.4, ifade: "Yeterli sayıda elemanın ölçüleri verilen bir üçgeni çizer."}
+      - {kod: M.8.3.1.5, ifade: "Pisagor bağıntısını oluşturur, ilgili problemleri çözer."}
+    anahtar_kelimeler: [üçgen, pisagor, kenarortay, açıortay, yükseklik, hipotenüs, dik üçgen]
+  - id: mat.eslik_benzerlik
+    ad: Eşlik ve Benzerlik
+    kod: M.8.3.2
+    donem: 2
+    kazanimlar:
+      - {kod: M.8.3.2.1, ifade: "Eşlik ve benzerliği ilişkilendirir, eş ve benzer şekillerin kenar ve açı özelliklerini belirler."}
+      - {kod: M.8.3.2.2, ifade: "Benzer çokgenlerin benzerlik oranını belirler, bir çokgene eş ve benzer çokgenler oluşturur."}
+    anahtar_kelimeler: [benzer, benzerlik, benzerlik oranı, eş çokgen, ölçek]
+  - id: mat.donusum_geometrisi
+    ad: Dönüşüm Geometrisi
+    kod: M.8.3.3
+    donem: 2
+    kazanimlar:
+      - {kod: M.8.3.3.1, ifade: "Nokta, doğru parçası ve diğer düzlemsel şekillerin öteleme sonucundaki görüntülerini çizer."}
+      - {kod: M.8.3.3.2, ifade: "Nokta, doğru parçası ve diğer düzlemsel şekillerin yansıma sonucundaki görüntülerini çizer."}
+      - {kod: M.8.3.3.3, ifade: "Çokgenlerin öteleme ve yansımalar sonucunda ortaya çıkan görüntüsünü oluşturur."}
+    anahtar_kelimeler: [öteleme, ötelen, yansıma, yansıması, dönüşüm, simetri, görüntüsü]
+  - id: mat.geometrik_cisimler
+    ad: Geometrik Cisimler
+    kod: M.8.3.4
+    donem: 2
+    kazanimlar:
+      - {kod: M.8.3.4.1, ifade: "Dik prizmaları tanır, temel elemanlarını belirler, inşa eder ve açınımını çizer."}
+      - {kod: M.8.3.4.2, ifade: "Dik dairesel silindirin temel elemanlarını belirler, inşa eder ve açınımını çizer."}
+      - {kod: M.8.3.4.3, ifade: "Dik dairesel silindirin yüzey alanı bağıntısını oluşturur, ilgili problemleri çözer."}
+      - {kod: M.8.3.4.4, ifade: "Dik dairesel silindirin hacim bağıntısını oluşturur, ilgili problemleri çözer."}
+      - {kod: M.8.3.4.5, ifade: "Dik piramidi tanır, temel elemanlarını belirler, inşa eder ve açınımını çizer."}
+      - {kod: M.8.3.4.6, ifade: "Dik koniyi tanır, temel elemanlarını belirler, inşa eder ve açınımını çizer."}
+    anahtar_kelimeler: [prizma, silindir, piramit, koni, açınım, hacim, yüzey alanı, küp]
+
+fen:
+  - id: fen.mevsimler_iklim
+    ad: Mevsimler ve İklim
+    kod: F.8.1
+    donem: 1
+    alt_konular:
+      - {kod: F.8.1.1, ad: Mevsimlerin Oluşumu}
+      - {kod: F.8.1.2, ad: İklim ve Hava Hareketleri}
+    anahtar_kelimeler: [mevsim, eksen eğikliği, güneş ışınları, gölge boyu, gündönümü, ekinoks, 21 haziran, 21 aralık, iklim, hava olayı, rüzgâr, rüzgar, alçak basınç, yüksek basınç, meteoroloji, klimatoloji, nem]
+  - id: fen.dna_genetik
+    ad: DNA ve Genetik Kod
+    kod: F.8.2
+    donem: 1
+    alt_konular:
+      - {kod: F.8.2.1, ad: "Nükleotit, Gen, DNA ve Kromozom"}
+      - {kod: F.8.2.2, ad: Kalıtım}
+      - {kod: F.8.2.3, ad: Mutasyon ve Modifikasyon}
+      - {kod: F.8.2.4, ad: Adaptasyon}
+      - {kod: F.8.2.5, ad: Biyoteknoloji}
+    anahtar_kelimeler: [dna, nükleotit, '/\bgen(ler|leri|lerin|in|i|e)?\b/', genetik, kromozom, kalıtım, baskın, çekinik, çaprazlama, fenotip, genotip, mutasyon, modifikasyon, adaptasyon, biyoteknoloji, doğal seçilim, saf döl, melez, eşlenme, eşleme]
+  - id: fen.basinc
+    ad: Basınç
+    kod: F.8.3
+    donem: 1
+    alt_konular:
+      - {ad: Katı Basıncı}
+      - {ad: Sıvı Basıncı}
+      - {ad: Gaz Basıncı ve Günlük Hayattaki Uygulamalar}
+    anahtar_kelimeler: [basınç, basıncı, yüzey alanı, derinlik, açık hava basıncı, gaz basıncı, sıvı basıncı, katı basıncı]
+  - id: fen.madde_endustri
+    ad: Madde ve Endüstri
+    kod: F.8.4
+    donem: 1
+    alt_konular:
+      - {kod: F.8.4.1, ad: Periyodik Sistem}
+      - {kod: F.8.4.2, ad: Fiziksel ve Kimyasal Değişimler}
+      - {kod: F.8.4.3, ad: Kimyasal Tepkimeler}
+      - {kod: F.8.4.4, ad: Asitler ve Bazlar}
+      - {kod: F.8.4.5, ad: Maddenin Isı ile Etkileşimi}
+      - {kod: F.8.4.6, ad: Türkiye'de Kimya Endüstrisi}
+    anahtar_kelimeler: [periyodik, element, metal, ametal, yarı metal, soy gaz, periyot, kimyasal değişim, fiziksel değişim, tepkime, '/\basi[dt]/', '/\bbaz(lar|ları|ın|ik)?\b/', '/\bph\b/', turnusol, nötrleşme, öz ısı, hal değişimi, erime, kaynama, donma, yoğuşma, kütle korunumu, kimya endüstrisi]
+  - id: fen.basit_makineler
+    ad: Basit Makineler
+    kod: F.8.5
+    donem: 2
+    alt_konular:
+      - {kod: F.8.5.1, ad: Basit Makineler}
+    anahtar_kelimeler: [kaldıraç, makara, eğik düzlem, çıkrık, dişli, vida, kuvvetten kazanç, yoldan kazanç, palanga, destek noktası]
+  - id: fen.enerji_cevre
+    ad: Enerji Dönüşümleri ve Çevre Bilimi
+    kod: F.8.6
+    donem: 2
+    alt_konular:
+      - {kod: F.8.6.1, ad: Besin Zinciri ve Enerji Akışı}
+      - {kod: F.8.6.2, ad: Enerji Dönüşümleri}
+      - {kod: F.8.6.3, ad: Madde Döngüleri ve Çevre Sorunları}
+      - {kod: F.8.6.4, ad: Sürdürülebilir Kalkınma}
+    anahtar_kelimeler: [besin zinciri, üretici, tüketici, ayrıştırıcı, fotosentez, oksijenli solunum, oksijensiz solunum, fermantasyon, madde döngüsü, karbon döngüsü, azot döngüsü, su döngüsü, küresel ısınma, sürdürülebilir, geri dönüşüm, enerji piramidi, klorofil]
+  - id: fen.elektrik
+    ad: Elektrik Yükleri ve Elektrik Enerjisi
+    kod: F.8.7
+    donem: 2
+    alt_konular:
+      - {kod: F.8.7.1, ad: Elektrik Yükleri ve Elektriklenme}
+      - {kod: F.8.7.2, ad: Elektrik Yüklü Cisimler}
+      - {kod: F.8.7.3, ad: Elektrik Enerjisinin Dönüşümü}
+    anahtar_kelimeler: [elektrik yükü, elektriklenme, sürtünme ile, dokunma ile, etki ile, elektroskop, topraklama, yıldırım, paratoner, elektrik enerjisi, santral, enerji tasarrufu, yüklü, nötr]
+
+inkilap:
+  - id: ink.kahraman_doguyor
+    ad: Bir Kahraman Doğuyor
+    kod: İTA.8.1
+    donem: 1
+    alt_konular:
+      - {ad: "Avrupa'daki gelişmeler ve Osmanlı Devleti'ne etkileri"}
+      - {ad: "Mustafa Kemal'in çocukluk ve öğrenim hayatı"}
+      - {ad: "Mustafa Kemal'in askerlik hayatı ve fikir hayatını etkileyen ortam"}
+    anahtar_kelimeler: [selanik, manastır, askerî rüştiye, harbiye, trablusgarp, balkan savaşları, fransız ihtilali, sanayi inkılabı, aydınlanma, meşrutiyet, ittihat ve terakki]
+  - id: ink.milli_uyanis
+    ad: "Millî Uyanış: Bağımsızlık Yolunda Atılan Adımlar"
+    kod: İTA.8.2
+    donem: 1
+    alt_konular:
+      - {ad: "I. Dünya Savaşı ve cepheler"}
+      - {ad: "Mondros Ateşkes Antlaşması ve işgaller"}
+      - {ad: "Cemiyetler ve Kuvâ-yı Millîye"}
+      - {ad: "Samsun'a çıkış, genelgeler ve kongreler"}
+      - {ad: "Misak-ı Millî, TBMM'nin açılışı ve Sevr"}
+    anahtar_kelimeler: [mondros, cemiyet, kuvâ-yı millîye, kuvayımilliye, samsun, havza, amasya genelgesi, erzurum kongresi, sivas kongresi, misak-ı millî, mebusan, temsil heyeti, manda, himaye, sevr, birinci dünya savaşı, i. dünya savaşı, çanakkale]
+  - id: ink.milli_destan
+    ad: "Millî Bir Destan: Ya İstiklal Ya Ölüm!"
+    kod: İTA.8.3
+    donem: 1
+    alt_konular:
+      - {ad: "Doğu, Güney ve Batı cepheleri"}
+      - {ad: "Sakarya Meydan Muharebesi, Büyük Taarruz"}
+      - {ad: "Mudanya Ateşkesi ve Lozan Barış Antlaşması"}
+    anahtar_kelimeler: [inönü, sakarya, büyük taarruz, başkomutanlık, tekâlif-i millîye, mudanya, lozan, gümrü, moskova antlaşması, kars antlaşması, ankara antlaşması, düzenli ordu, istiklal mahkemesi, istiklal marşı, kütahya-eskişehir]
+  - id: ink.ataturkculuk
+    ad: Atatürkçülük ve Çağdaşlaşan Türkiye
+    kod: İTA.8.4
+    alt_konular:
+      - {ad: "Atatürk ilkeleri"}
+      - {ad: "Siyasi alanda inkılaplar"}
+      - {ad: "Hukuk alanında inkılaplar"}
+      - {ad: "Eğitim ve kültür alanında inkılaplar"}
+      - {ad: "Toplumsal alanda inkılaplar"}
+      - {ad: "Ekonomi alanında gelişmeler"}
+    anahtar_kelimeler: [cumhuriyetçilik, milliyetçilik, halkçılık, devletçilik, laiklik, inkılapçılık, saltanat, halifelik, cumhuriyetin ilanı, tevhid-i tedrisat, medeni kanun, harf inkılabı, soyadı, şapka, türk tarih kurumu, türk dil kurumu, izmir iktisat kongresi, aşar]
+  - id: ink.demokratiklesme
+    ad: Demokratikleşme Çabaları
+    kod: İTA.8.5
+    alt_konular:
+      - {ad: "Çok partili hayata geçiş denemeleri"}
+      - {ad: "Cumhuriyete yönelik tehditler"}
+    anahtar_kelimeler: [çok partili, terakkiperver, serbest cumhuriyet fırkası, şeyh said, menemen, izmir suikastı, seçme ve seçilme]
+  - id: ink.dis_politika
+    ad: Atatürk Dönemi Türk Dış Politikası
+    kod: İTA.8.6
+    alt_konular:
+      - {ad: "Lozan'dan kalan sorunlar (Musul, nüfus mübadelesi, yabancı okullar)"}
+      - {ad: "Milletler Cemiyeti, Balkan Antantı, Sadabat Paktı"}
+      - {ad: "Montrö Boğazlar Sözleşmesi ve Hatay meselesi"}
+    anahtar_kelimeler: [musul, nüfus mübadelesi, yabancı okullar, milletler cemiyeti, balkan antantı, sadabat, montrö, boğazlar, hatay, dış politika]
+  - id: ink.ataturk_olumu
+    ad: Atatürk'ün Ölümü ve Sonrası
+    kod: İTA.8.7
+    alt_konular:
+      - {ad: "Atatürk'ün ölümü ve manevi mirası"}
+      - {ad: "II. Dünya Savaşı ve Türkiye"}
+    anahtar_kelimeler: [atatürk'ün ölümü, manevi miras, ismet inönü, millî şef, ii. dünya savaşı, ikinci dünya savaşı]
+
+din:
+  - id: din.kader
+    ad: Kader İnancı
+    alt_konular:
+      - {ad: "Kader ve kaza"}
+      - {ad: "Evrendeki yasalar (fiziki, biyolojik, toplumsal, ahlaki)"}
+      - {ad: "İrade, özgürlük ve sorumluluk; tevekkül, ecel, rızık"}
+      - {ad: "Ayet el-Kürsî ve anlamı"}
+    anahtar_kelimeler: [kader, '/\bkaza(yı|ya|nın|dır)?\b/', ilahi yasa, yasalar, irade, özgür, sorumluluk, tevekkül, ecel, rızık, rızk, ayet el-kürsî, ayetel kürsi]
+  - id: din.zekat_sadaka
+    ad: Zekât ve Sadaka
+    alt_konular:
+      - {ad: "İslam'ın paylaşma ve yardımlaşmaya verdiği önem"}
+      - {ad: "Zekât ve sadaka ibadeti; kimlere verilir"}
+      - {ad: "Sadaka-i fıtır (fitre)"}
+      - {ad: "Mâûn Suresi ve anlamı"}
+    anahtar_kelimeler: [zekât, zekat, sadaka, fitre, fıtır, infak, yardımlaşma, paylaşma, nisap, mâûn, maun]
+  - id: din.din_ve_hayat
+    ad: Din ve Hayat
+    alt_konular:
+      - {ad: "Din, birey ve toplum"}
+      - {ad: "Dinin temel gayesi ve korunmasını emrettiği temel değerler"}
+    anahtar_kelimeler: [din ve hayat, birey ve toplum, temel değer, canın korunması, aklın korunması, neslin korunması, malın korunması, dinin korunması]
+  - id: din.hz_muhammed
+    ad: Hz. Muhammed'in Örnekliği
+    alt_konular:
+      - {ad: "Hz. Muhammed'in ahlaki özellikleri (güvenilirlik, merhamet, adalet, cesaret...)"}
+      - {ad: "Hz. Muhammed'in aile ve toplum hayatı"}
+    anahtar_kelimeler: [hz. muhammed, peygamberimiz, sevgili peygamberimiz, örneklik, güvenilir, merhamet, adalet, istişare]
+  - id: din.kuran
+    ad: Kur'an-ı Kerim ve Özellikleri
+    alt_konular:
+      - {ad: "Kur'an'ın indirilişi, korunması ve temel özellikleri"}
+      - {ad: "Kur'an'ın ana konuları (inanç, ibadet, ahlak, kıssalar)"}
+    anahtar_kelimeler: [kur'an, vahiy, indiriliş, mushaf, ana konu, kıssa, evrensel]
+
+ingilizce:
+  - {id: ing.friendship,      ad: "Friendship",      donem: 1, anahtar_kelimeler: [friend, invitation, invite, accept, refuse, apologize, party, "would you like", "i'm sorry"]}
+  - {id: ing.teen_life,       ad: "Teen Life",       donem: 1, anahtar_kelimeler: [teen, hobby, hobbies, prefer, "can't stand", enjoy, "i'd rather", free time]}
+  - {id: ing.in_the_kitchen,  ad: "In the Kitchen",  donem: 1, anahtar_kelimeler: [recipe, ingredient, cook, boil, chop, slice, bake]}
+  - {id: ing.on_the_phone,    ad: "On the Phone",    donem: 1, anahtar_kelimeler: [phone, "phone call", "hold on", "leave a message", "speak to", "hang up", calling]}
+  - {id: ing.the_internet,    ad: "The Internet",    donem: 1, anahtar_kelimeler: [internet, online, website, download, password, account, social media, cyberbully]}
+  - {id: ing.adventures,      ad: "Adventures",      donem: 2, anahtar_kelimeler: [adventure, extreme, bungee, rafting, skydiving, exciting, dangerous]}
+  - {id: ing.tourism,         ad: "Tourism",         donem: 2, anahtar_kelimeler: [tourism, travel, hotel, destination, sightseeing, accommodation, "have you ever", holiday]}
+  - {id: ing.chores,          ad: "Chores",          donem: 2, anahtar_kelimeler: [chore, laundry, "take out", tidy, dishes, "have to", vacuum, responsible]}
+  - {id: ing.science,         ad: "Science",         donem: 2, anahtar_kelimeler: [science, scientist, experiment, invention, invent, discover, laboratory]}
+  - {id: ing.natural_forces,  ad: "Natural Forces",  donem: 2, anahtar_kelimeler: [natural disaster, earthquake, flood, tsunami, storm, global warming, drought, avalanche, wildfire]}
