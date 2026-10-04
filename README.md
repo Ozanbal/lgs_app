@@ -26,9 +26,9 @@ Soruların metinleri uydurulmaz, yalnızca resmi PDF'lerden alınır.
 ## Kurulum
 
 ```bash
-python -m venv .venv && . .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate   # Python 3.9+
 pip install -e ".[dev]"
-pytest
+python -m pytest
 ```
 
 ## Soru bankasını doldurma

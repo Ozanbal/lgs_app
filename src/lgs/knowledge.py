@@ -4,14 +4,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import lru_cache
-from importlib import resources
+from pathlib import Path
 from typing import Any
 
 import yaml
 
 
+DATA_DIR = Path(__file__).parent / "data"
+
+
 def _load(name: str) -> Any:
-    with resources.files("lgs.data").joinpath(f"{name}.yaml").open(encoding="utf-8") as f:
+    with (DATA_DIR / f"{name}.yaml").open(encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
